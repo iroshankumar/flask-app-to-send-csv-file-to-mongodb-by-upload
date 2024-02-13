@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload CSV</title>
+</head>
+<body>
+    <h1>Upload CSV File</h1>
+    <form method="POST" enctype="multipart/form-data" id="uploadForm">
+        <input type="file" name="file" id="fileInput" accept=".csv" required>
+        <button type="submit" id="uploadButton">Upload</button>
+    </form>
+
+    <hr>
+
+    <h2>Preview:</h2>
+    <div id="csvPreview"></div>
+
+    <script>
+        document.getElementById('fileInput').addEventListener('change', function(event) {
+            const file = event.target.files[0];
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const csv = e.target.result;
+                const lines = csv.split('\n');
+                const table = document.createElement('table');
+                for (let i = 0; i < lines.length; i++) {
+                    const row = document.createElement('tr');
+                    const cells = lines[i].split(',');
+                    for (let j = 0; j < cells.length; j++) {
+                        const cell = document.createElement('td');
+                        cell.textContent = cells[j];
+                        row.appendChild(cell);
+                    }
+                    table.appendChild(row);
+                }
+                document.getElementById('csvPreview').innerHTML = '';
+                document.getElementById('csvPreview').appendChild(table);
+            };
+            reader.readAsText(file);
+        });
+    </script>
+</body>
+</html>
